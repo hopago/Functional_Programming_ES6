@@ -29,7 +29,7 @@ for (const p of products) {
 names = products.map(p => p.name);
 
 // 이터러블 프로토콜을 따르는 개체를 순회하는 Custom Map
-const cMap = (cb, iter) => {
+export const cMap = (cb, iter) => {
     let res = [];
     for (const i of iter) {
         res.push(cb(i));
@@ -39,11 +39,13 @@ const cMap = (cb, iter) => {
 const cNames = cMap(p => p.name, products);
 
 // console.log(document.querySelectorAll("*").map(el => el.nodeName));
-console.log(cMap(el => el.nodeName, document.querySelectorAll("*")));
-const iterator = document.querySelectorAll("*")[Symbol.iterator]();
-console.log(iterator.next());
-console.log(iterator.next());
-console.log(iterator.next());
+if (global.document) {
+    console.log(cMap(el => el.nodeName, document?.querySelectorAll("*")));
+    const iterator = document?.querySelectorAll("*")[Symbol.iterator]();
+    console.log(iterator.next());
+    console.log(iterator.next());
+    console.log(iterator.next());
+}
 
 function* gen() {
     yield 1;
@@ -51,3 +53,14 @@ function* gen() {
     yield 5;
 }
 console.log(cMap(val => val * val, gen()));
+
+let m = new Map();
+m.set("a", 10);
+m.set("b", 30);
+m.set("c", 50);
+const it = m[Symbol.iterator]();
+console.log(it.next());
+console.log(it.next());
+console.log(it.next());
+
+// const nM = cMap(new Map(([k, v]) => [k, v * 3]), m);
