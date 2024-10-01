@@ -1,3 +1,5 @@
+import { cCurry } from "./curry.js";
+
 const products = [
     {
         name: "반팔티",
@@ -29,13 +31,13 @@ for (const p of products) {
 names = products.map(p => p.name);
 
 // 이터러블 프로토콜을 따르는 개체를 순회하는 Custom Map
-export const cMap = (cb, iter) => {
+export const cMap = cCurry((cb, iter) => {
     let res = [];
     for (const i of iter) {
         res.push(cb(i));
     }
     return res;
-}
+})
 const cNames = cMap(p => p.name, products);
 
 // console.log(document.querySelectorAll("*").map(el => el.nodeName));

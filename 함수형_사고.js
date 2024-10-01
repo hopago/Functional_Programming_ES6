@@ -1,6 +1,7 @@
 import { cReduce } from "./reduce.js";
 import { cFilter } from "./filter.js";
 import { cMap } from "./map.js";
+import { reduceGo } from "./go.js";
 
 const products = [
     {
@@ -33,6 +34,8 @@ const priceList = cReduce(
 
 console.log(priceList);
 
+console.clear();
+
 console.log(
     cReduce(
         add,
@@ -40,4 +43,13 @@ console.log(
             cFilter(p => p.price < 20000, products)
         ) // 숫자로 이루어진 배열로 평가
     )
+)
+
+console.clear();
+reduceGo(
+    products,
+    cFilter(p => p.price < 20000),
+    cMap(p => p.price),
+    cReduce(add),
+    console.log(prices)
 )

@@ -1,4 +1,8 @@
+import { cCurry } from "./curry.js";
+
 const nums = [1, 2, 3, 4, 5];
+
+console.log(nums.reduce((acc, iter) => acc + iter, 0));
 
 let total = 0;
 
@@ -8,7 +12,7 @@ for (const n of nums) {
 
 console.log(total);
 
-export const cReduce = (cb, acc, iter) => {
+export const cReduce = cCurry((cb, acc, iter) => {
     if (!iter) {
         iter = acc[Symbol.iterator]()
         acc = iter.next().value;
@@ -19,7 +23,7 @@ export const cReduce = (cb, acc, iter) => {
     }
 
     return acc;
-};
+});
 
 const add = (a, b) => a + b;
 

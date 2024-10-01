@@ -1,3 +1,5 @@
+import { cCurry } from "./curry.js";
+
 const products = [
     {
         name: "반팔티",
@@ -29,7 +31,7 @@ for (const p of products) {
 }
 console.log(under20000);
 
-export const cFilter = (condition, iter) => {
+export const cFilter = cCurry((condition, iter) => {
     const res = [];
 
     for (const a of iter) {
@@ -37,7 +39,7 @@ export const cFilter = (condition, iter) => {
     }
 
     return res;
-};
+});
 
 console.log(cFilter(p => p.price < 20000, products));
 
