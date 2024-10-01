@@ -41,6 +41,7 @@ export const cMap = cCurry((cb, iter) => {
 const cNames = cMap(p => p.name, products);
 
 // console.log(document.querySelectorAll("*").map(el => el.nodeName));
+/*
 if (global.document) {
     console.log(cMap(el => el.nodeName, document?.querySelectorAll("*")));
     const iterator = document?.querySelectorAll("*")[Symbol.iterator]();
@@ -48,6 +49,7 @@ if (global.document) {
     console.log(iterator.next());
     console.log(iterator.next());
 }
+*/
 
 function* gen() {
     yield 1;

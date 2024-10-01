@@ -2,6 +2,7 @@ import { cReduce } from "./reduce.js";
 import { cFilter } from "./filter.js";
 import { cMap } from "./map.js";
 import { reduceGo } from "./go.js";
+import { cPipe } from "./pipe.js";
 
 const products = [
     {
@@ -36,6 +37,16 @@ console.log(priceList);
 
 console.clear();
 
+const calcTotal = cPipe(
+    cMap(p => p.price),
+    cReduce(add)
+)
+
+const getTotal = predi => cPipe(
+    cFilter(predi),
+    calcTotal,
+)
+
 console.log(
     cReduce(
         add,
@@ -48,8 +59,6 @@ console.log(
 console.clear();
 reduceGo(
     products,
-    cFilter(p => p.price < 20000),
-    cMap(p => p.price),
-    cReduce(add),
+    getTotal,
     console.log(prices)
 )

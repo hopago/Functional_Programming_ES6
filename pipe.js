@@ -1,8 +1,8 @@
 import { reduceGo } from "./go.js";
 
-const pipe = (f, ...fs) => (...params) => reduceGo(f(...params), ...fs);
+export const cPipe = (f, ...fs) => (...params) => reduceGo(f(...params), ...fs);
 
-const f = pipe(
+const f = cPipe(
     (a, b) => a + b,
     a => a + 1,
     a => a + 11,
