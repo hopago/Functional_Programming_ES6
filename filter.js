@@ -33,9 +33,12 @@ console.log(under20000);
 
 export const cFilter = cCurry((condition, iter) => {
     const res = [];
+    let cur;
 
-    for (const a of iter) {
-        if (condition(a)) res.push(a)
+    iter = iter[Symbol.iterator]();
+    while (!(cur = iter.next()).done) {
+        const item = cur.value;
+        if (condition(item)) res.push(item);
     }
 
     return res;

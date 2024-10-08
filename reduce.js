@@ -14,12 +14,18 @@ console.log(total);
 
 export const cReduce = cCurry((cb, acc, iter) => {
     if (!iter) {
-        iter = acc[Symbol.iterator]()
-        acc = iter.next().value;
+        iter = acc[Symbol.iterator]();
+        const firstElement = iter.next();
+        if (firstElement.done) return acc;
+        acc = firstElement.value;
+    } else {
+        iter = iter[Symbol.iterator]();
     }
 
-    for (const i of iter) {
-        acc = cb(acc, i)
+    let cur;
+    while (!(cur = iter.next()).done) {
+        const item = cur.value;
+        acc = cb(acc, item);
     }
 
     return acc;

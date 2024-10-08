@@ -33,9 +33,14 @@ names = products.map(p => p.name);
 // 이터러블 프로토콜을 따르는 개체를 순회하는 Custom Map
 export const cMap = cCurry((cb, iter) => {
     let res = [];
-    for (const i of iter) {
-        res.push(cb(i));
+    let cur;
+
+    iter = iter[Symbol.iterator]();
+    while (!(cur = iter.next()).done) {
+        const item = cur.value;
+        res.push(cb(item));
     }
+
     return res;
 })
 const cNames = cMap(p => p.name, products);
