@@ -55,3 +55,14 @@ console.clear();
 console.log("프로토콜 지연평가")
 
 reduceGo(L.range(10), L.map(n => n + 10), L.filter(n => n % 2), take(3), log);
+
+/** Map filter 결합 법칙 
+ * 사용하는 데이터 타입 무관
+ * 보조 함수와 순수 함수라면 무엇이든
+ * 결합한다면 결과가 같다
+ * 
+ * [[mapping, mapping], [filtering, filtering], [mapping, mapping]]
+ * =
+ * [[mapping, filtering, mapping], [mapping, filtering, mapping]]
+*/
+
