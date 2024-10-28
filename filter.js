@@ -1,4 +1,7 @@
 import { cCurry } from "./curry.js";
+import { cPipe } from "./pipe.js";
+import { take } from "./take.js";
+import { L } from "./프로토콜_지연평가.js";
 
 const products = [
     {

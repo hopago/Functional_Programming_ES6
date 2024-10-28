@@ -4,6 +4,7 @@ import { reduceGo } from "./go.js";
 import { cMap } from "./map.js";
 import { cFilter } from "./filter.js";
 import { cCurry } from "./curry.js";
+import { cPipe } from "./pipe.js";
 
 console.clear(); // node 프로토콜_지연평가.js
 
@@ -21,13 +22,7 @@ L.range = function* (l) {
 
 // L.map
 L.map = cCurry(function* (f, iterable) {
-    let cur;
-
-    const iter = iterable[Symbol.iterator]();
-    while (!(cur = iter.next()).done) {
-        const item = cur.value;
-        yield f(item);
-    }
+    for (const i of iterable) yield f(i)
 });
 
 // 값 선언 자체로 평가 X, 값을 호출 할 때 평가, 필요한 시점에 평가된다
@@ -37,13 +32,7 @@ console.log(arr);
 
 // L.filter
 L.filter = cCurry(function* (f, iterable) {
-    let cur;
-
-    const iter = iterable[Symbol.iterator]();
-    while (!(cur = iter.next()).done) {
-        const item = cur.value;
-        if (f(item)) yield item;
-    }
+    for (const i of iterable) if (f(i)) yield i;
 })
 
 var it = L.filter(v => v % 2, [1, 2, 3, 4, 5]);
@@ -66,3 +55,32 @@ reduceGo(L.range(10), L.map(n => n + 10), L.filter(n => n % 2), take(3), log);
  * [[mapping, filtering, mapping], [mapping, filtering, mapping]]
 */
 
+/**
+ * L.flatten
+ * [...[1, 2], 3, 4, ...[5, 6, 7], 8, ...[9]]
+ */
+
+console.clear();
+
+export const isIterable = i => i && i[Symbol.iterator];
+
+L.flatten = function* (iterable) {
+    for (const i of iterable) {
+        if (isIterable(i)) {
+            for (const item of i) yield item;
+        } else yield i;
+    }
+}
+
+var it = L.flatten([...[1, 2], 3, 4, ...[5, 6, 7], 8, ...[9]]);
+console.log([...it]);
+
+const flatten = cPipe(L.flatten, take(Infinity));
+console.log(flatten([...[1, 2], 3, 4, ...[5, 6, 7], 8, ...[9]]))
+
+// export const map = cCurry(cPipe(reduceGo(
+//     L.map,
+//     take(Infinity),
+// )));
+
+// export const filter = cCurry(cPipe(L.filter, take(Infinity)))
