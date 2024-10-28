@@ -9,4 +9,3 @@ reduceGo(
     a => a + 101,
     a => console.log(a)
 )
-

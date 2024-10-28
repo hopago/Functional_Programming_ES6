@@ -9,7 +9,7 @@ console.clear(); // node 프로토콜_지연평가.js
 
 const log = value => console.log(value);
 
-const L = {};
+export const L = {};
 
 L.range = function* (l) {
     let i = -1;
