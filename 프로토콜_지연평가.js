@@ -66,9 +66,15 @@ export const isIterable = i => i && i[Symbol.iterator];
 
 L.flatten = function* (iterable) {
     for (const i of iterable) {
-        if (isIterable(i)) {
-            for (const item of i) yield item;
-        } else yield i;
+        if (isIterable(i)) yield* i;
+        else yield i;
+    }
+}
+
+L.deepFlat = function* f(iterable) {
+    for (const i of iterable) {
+        if (isIterable(i)) yield* f(i);
+        else yield i;
     }
 }
 
@@ -84,3 +90,28 @@ console.log(flatten([...[1, 2], 3, 4, ...[5, 6, 7], 8, ...[9]]))
 // )));
 
 // export const filter = cCurry(cPipe(L.filter, take(Infinity)))
+
+console.clear();
+// flatMap, L.flatMap
+console.log([[1, 2, 3], [4, 5, 6], [7, 8, 9, [10, 11, 12]]].flatMap(a => a));
+console.log([[1, 2, 3], [4, 5, 6], [7, 8, 9, [10, 11, 12]]].flatMap((a) => a.flatMap((a) => {
+    if (Array.isArray(a)) {
+        const val = a.flatMap(a => a * a);
+        return val;
+    } else {
+        return a * a;
+    }
+})));
+
+log(L.flatten([[1, 2, 3], [4, 5, 6], [7, 8, 9]].map(a => a.map(a => a * a))));
+
+L.flatMap = function* (f, iterable) {
+    yield* L.flatten(L.map(f, iterable));
+};
+export const flatMap = cCurry(cPipe(L.flatMap, take(Infinity)));
+
+console.clear();
+const nestedArr = [1, 2, 3, [4, 5, 6]];
+const fmIt = L.flatMap((v) => (Array.isArray(v) ? v : [v * v]), nestedArr);
+log([...fmIt])
+log(flatMap(v => v, [1, 2, 3, [4, 5, 6], [7, 8, 9]]))
