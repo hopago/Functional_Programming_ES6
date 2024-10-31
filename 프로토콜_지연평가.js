@@ -81,7 +81,7 @@ L.deepFlat = function* f(iterable) {
 var it = L.flatten([...[1, 2], 3, 4, ...[5, 6, 7], 8, ...[9]]);
 console.log([...it]);
 
-const flatten = cPipe(L.flatten, take(Infinity));
+export const flatten = cPipe(L.flatten, take(Infinity));
 console.log(flatten([...[1, 2], 3, 4, ...[5, 6, 7], 8, ...[9]]))
 
 // export const map = cCurry(cPipe(reduceGo(
