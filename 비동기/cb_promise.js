@@ -1,3 +1,5 @@
+import { find } from "../take2.js";
+
 var log = val => console.log(val);
 
 var add10 = function (val, cb) {
@@ -50,6 +52,47 @@ log(f(g(1)));
 Promise.resolve(1).then(g).then(f).then(r => log(r))
 
 new Promise(resolve => setTimeout(() => resolve(2)))
-  .then(g)
-  .then(f)
-  .then(r => log(r))
+    .then(g)
+    .then(f)
+    .then(r => log(r));
+
+// Kleisli Composition
+/*
+    f, g
+
+    f(g(x)) = f(g(x)) / 실무에선 오류, side-effects의 이유로 성립하지 않는 경우도 있다
+
+    f(g(x)) = g(x) / x의 상태에 따라서 합성 결과가 원하지 않는 값을 만들었을 때,
+    g()의 return 값이 f를 합성 했음에도 불구하고 마치 합성하지 않은 것처럼 합성하는 규칙
+*/
+
+var users = [
+    { id: 1, name: "123" },
+    { id: 2, name: "456" },
+    { id: 3, name: "789" },
+];
+
+let getUserById = (id) => find(user => user.id === id, users);
+
+const f0 = ({ name }) => name;
+const g0 = getUserById;
+
+const fg = id => f0(g0(id));
+
+console.clear();
+
+let fr = fg(2);
+log(fr);
+
+// 실무에서 users의 변형
+users.pop();
+users.pop();
+users.pop();
+
+fr = fg(2);
+log(fr);
+
+const fq = id => Promise.resolve(id).then(g0).then(f0);
+fq.then(log);
+
+getUserById = id => find(u => u.id === id, users) || Promise.reject("유저가 없습니다");
