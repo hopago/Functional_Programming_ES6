@@ -30,7 +30,7 @@ var promiseB = promiseA.then(v => v - 5);
 
 const delay100 = v => new Promise(resolve => setTimeout(() => resolve(v), 100))
 
-const go = (v, f) => v instanceof Promise ? v.then(f) : f(v);
+export const go = (v, f) => v instanceof Promise ? v.then(f) : f(v);
 const add5 = v => v + 5;
 log(go(10, add5));
 log(go(delay100(10), add5))
